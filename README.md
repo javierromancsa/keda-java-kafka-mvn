@@ -1,0 +1,1 @@
+# keda-java-kafka-mvn
