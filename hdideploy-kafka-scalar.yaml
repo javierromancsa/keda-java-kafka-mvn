@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: mykafka-scaledobject
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: kafka-keda
+  pollingInterval: 30
+  triggers:
+  - type: kafka
+    metadata:
+      # Required 
+      # brokerList is deprecated 
+            bootstrapServers: wn2-jrs02k.qz1stakpznlepcjn2bzi2treqb.cx.internal.cloudapp.net:9092,wn1-jrs02k.qz1stakpznlepcjn2bzi2treqb.cx.internal.cloudapp.net:9092,wn0-jrs02k.qz1stakpznlepcjn2bzi2treqb.cx.internal.cloudapp.net:9092
+            consumerGroup: mygroup21       # Make sure that this consumer group name is the same one as the one that is consuming topics
+            topic: message
+            lagThreshold: "30"
+            offsetResetPolicy: earliest
