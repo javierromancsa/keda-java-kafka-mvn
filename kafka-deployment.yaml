@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: kafka-keda
+
+  labels:
+
+    app: mykafka
+
+spec:
+
+  selector:
+
+    matchLabels:
+
+      octopusexport: OctopusExport
+
+  replicas: 1
+
+  strategy:
+
+    type: RollingUpdate
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: mykafka
+
+        octopusexport: OctopusExport
+
+    spec:
+
+      containers:
+
+        - name: mykeda-test
+
+          image: 'jrsacr.azurecr.io/keda-test:v3'
+
+          resources:
+
+            requests:
+
+              memory: 512Mi
+
+              cpu: '.5'
+
+      affinity:
+
+        podAntiAffinity:
+
+          preferredDuringSchedulingIgnoredDuringExecution:
+
+            - weight: 100
+
+              podAffinityTerm:
+
+                labelSelector:
+
+                  matchExpressions:
+
+                    - key: app
+
+                      operator: In
+
+                      values:
+
+                        - web
+
+                topologyKey: kubernetes.io/hostname
+
